@@ -1,0 +1,5 @@
+Get all games:
+http://api.steampowered.com/ISteamApps/GetAppList/v0002/?key=STEAMKEY&format=json
+
+Get game details
+http://store.steampowered.com/api/appdetails?appids={APP_ID}
