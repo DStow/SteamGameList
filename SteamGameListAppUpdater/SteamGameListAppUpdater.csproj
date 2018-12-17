@@ -59,5 +59,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SteamGameListData\SteamGameListData.csproj">
+      <Project>{56ec37a8-3881-4f6d-ae52-d12a81870514}</Project>
+      <Name>SteamGameListData</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

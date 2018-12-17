@@ -4,13 +4,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SteamGameListData.Models;
+
 namespace SteamGameListAppUpdater
 {
     class Program
     {
         static void Main(string[] args)
         {
-            GetAppList.GetAllApps();
+            List<GetAppListApp> apiApps = GetAppList.GetAllApps();
+            List<SteamGameListData.Models.SteamApp> dbApps = SteamGameListData.Models.SteamApp.GetAllSteamApps();
+
+            int uploadCount = 0;
+
+            foreach(GetAppListApp steamApp in apiApps)
+            {
+                if(uploadCount> 10)
+                {
+                    break;
+                }
+
+                // Attempt to get from database
+                SteamApp existingApp = dbApps.Where(x => x.AppId == steamApp.AppId).FirstOrDefault();
+
+                if (existingApp == null)
+                {
+                    // Add
+                    Console.WriteLine("Missing {0}: {1}", steamApp.AppId, steamApp.Name);
+                    SteamApp.CreateSteamApp(steamApp.AppId, steamApp.Name);
+
+                    uploadCount++;
+                }
+                else
+                {
+                    Console.WriteLine("Found {0}: {1}", steamApp.AppId, steamApp.Name);
+                }
+            }
+
             // Connect to the API and get all of the apps.
 
             // For each app check if it exists in the database already
