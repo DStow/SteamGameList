@@ -19,10 +19,10 @@ namespace SteamGameListAppUpdater
 
             foreach(GetAppListApp steamApp in apiApps)
             {
-                if(uploadCount> 10)
-                {
-                    break;
-                }
+                //if(uploadCount> 10)
+                //{
+                //    break;
+                //}
 
                 // Attempt to get from database
                 SteamApp existingApp = dbApps.Where(x => x.AppId == steamApp.AppId).FirstOrDefault();
