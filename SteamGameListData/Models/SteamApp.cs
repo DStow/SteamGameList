@@ -12,6 +12,8 @@ namespace SteamGameListData.Models
         public int AppId { get; set; }
         public string Name { get; set; }
 
+        public DateTime? ReleaseDate { get; set; }
+
         public static int CreateSteamApp(int appId, string name)
         {
             SteamApp newApp = new SteamApp()

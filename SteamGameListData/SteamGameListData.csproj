@@ -57,6 +57,10 @@
     <Compile Include="Migrations\201812172049432_AddSteamApp.Designer.cs">
       <DependentUpon>201812172049432_AddSteamApp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812182250160_AddReleaseDateToSteamApp.cs" />
+    <Compile Include="Migrations\201812182250160_AddReleaseDateToSteamApp.Designer.cs">
+      <DependentUpon>201812182250160_AddReleaseDateToSteamApp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\SteamApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,6 +75,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812172049432_AddSteamApp.resx">
       <DependentUpon>201812172049432_AddSteamApp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812182250160_AddReleaseDateToSteamApp.resx">
+      <DependentUpon>201812182250160_AddReleaseDateToSteamApp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
