@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using SteamGameListData.Models;
@@ -28,14 +29,14 @@ namespace SteamGameListAppUpdater
                     WriteLine(string.Format("Missing {0}: {1}", steamApp.AppId, steamApp.Name), 0);
                     SteamApp newSteamApp = SteamApp.CreateSteamApp(steamApp.AppId, steamApp.Name);
 
-                    SteamApp.UpdateSteamAppReleaseDate(newSteamApp.SteamAppId, GetAppReleaseDate.GetAppReleaseDates(newSteamApp.AppId));
+                    SteamApp.UpdateSteamAppReleaseDate(newSteamApp.AppId, GetAppDate(newSteamApp));
                 }
                 else if (existingApp.ReleaseDate == null)
                 {
                     WriteLine(string.Format("No Release Date {0}: {1}", steamApp.AppId, steamApp.Name), 0);
 
                     // Get the release date
-                    SteamApp.UpdateSteamAppReleaseDate(existingApp.SteamAppId, GetAppReleaseDate.GetAppReleaseDates(existingApp.AppId));
+                    SteamApp.UpdateSteamAppReleaseDate(existingApp.SteamAppId, GetAppDate(existingApp));
                 }
                 else
                 {
@@ -48,22 +49,37 @@ namespace SteamGameListAppUpdater
             }
         }
 
+        static DateTime GetAppDate(SteamApp steamApp)
+        {
+            try
+            {
+                return GetAppReleaseDate.GetAppReleaseDates(steamApp.AppId);
+            }
+            catch (ToManyAPIRequestsException)
+            {
+                WriteLine("To many Steam Requests!", 1);
+                Thread.Sleep(5000);
+                return GetAppDate(steamApp);
+            }
+        }
+
         static void WriteLine(string message, int lineIndex)
         {
-            Console.SetCursorPosition(0, lineIndex);
+            Console.WriteLine(message);
+            //Console.SetCursorPosition(0, lineIndex);
 
-            string clear = "";
+            //string clear = "";
 
-            for (int i = 0; i < Console.WindowWidth; i++)
-            {
-                clear += " ";
-            }
+            //for (int i = 0; i < Console.WindowWidth; i++)
+            //{
+            //    clear += " ";
+            //}
 
 
-            Console.Write(clear);
-            Console.SetCursorPosition(0, lineIndex);
+            //Console.Write(clear);
+            //Console.SetCursorPosition(0, lineIndex);
 
-            Console.Write(message);
+            //Console.Write(message);
         }
     }
 }

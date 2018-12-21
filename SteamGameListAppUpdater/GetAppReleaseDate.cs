@@ -20,14 +20,21 @@ namespace SteamGameListAppUpdater
 
             IRestResponse response = client.Execute(request);
 
-            dynamic appData = JsonConvert.DeserializeObject(response.Content);
-            try
+            if (response.StatusCode == ((System.Net.HttpStatusCode)429))
             {
-                return appData[appId.ToString()]["data"]["release_date"].date;
+                throw new ToManyAPIRequestsException();
             }
-            catch
+            else
             {
-                return new DateTime(1900, 01, 01);
+                dynamic appData = JsonConvert.DeserializeObject(response.Content);
+                try
+                {
+                    return appData[appId.ToString()]["data"]["release_date"].date;
+                }
+                catch
+                {
+                    return new DateTime(1900, 01, 01);
+                }
             }
         }
     }
