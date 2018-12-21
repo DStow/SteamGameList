@@ -14,7 +14,7 @@ namespace SteamGameListData.Models
 
         public DateTime? ReleaseDate { get; set; }
 
-        public static int CreateSteamApp(int appId, string name)
+        public static SteamApp CreateSteamApp(int appId, string name)
         {
             SteamApp newApp = new SteamApp()
             {
@@ -26,7 +26,21 @@ namespace SteamGameListData.Models
             context.SteamApps.Add(newApp);
             context.SaveChanges();
 
-            return newApp.SteamAppId;
+            return newApp;
+        }
+
+        public static void UpdateSteamAppReleaseDate(int steamAppId, DateTime releaseDate)
+        {
+            AppContext context = new AppContext();
+
+            SteamApp app = context.SteamApps.Where(x => x.SteamAppId == steamAppId).FirstOrDefault();
+
+            if(app != null)
+            {
+                app.ReleaseDate = releaseDate;
+            }
+
+            context.SaveChanges();
         }
 
         public static List<SteamApp> GetAllSteamApps()

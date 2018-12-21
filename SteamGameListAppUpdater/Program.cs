@@ -15,9 +15,9 @@ namespace SteamGameListAppUpdater
             List<GetAppListApp> apiApps = GetAppList.GetAllApps();
             List<SteamGameListData.Models.SteamApp> dbApps = SteamGameListData.Models.SteamApp.GetAllSteamApps();
 
-            int uploadCount = 0;
+            int counter = 0;
 
-            foreach(GetAppListApp steamApp in apiApps)
+            foreach (GetAppListApp steamApp in apiApps)
             {
                 //if(uploadCount> 10)
                 //{
@@ -30,28 +30,45 @@ namespace SteamGameListAppUpdater
                 if (existingApp == null)
                 {
                     // Add
-                    Console.WriteLine("Missing {0}: {1}", steamApp.AppId, steamApp.Name);
-                    SteamApp.CreateSteamApp(steamApp.AppId, steamApp.Name);
+                    WriteLine(string.Format("Missing {0}: {1}", steamApp.AppId, steamApp.Name), 0);
+                    SteamApp newSteamApp = SteamApp.CreateSteamApp(steamApp.AppId, steamApp.Name);
 
-                    uploadCount++;
+                    SteamApp.UpdateSteamAppReleaseDate(newSteamApp.SteamAppId, GetAppReleaseDate.GetAppReleaseDates(newSteamApp.AppId));
+                }
+                else if (existingApp.ReleaseDate == null)
+                {
+                    WriteLine(string.Format("No Release Date {0}: {1}", steamApp.AppId, steamApp.Name), 0);
+
+                    // Get the release date
+                    SteamApp.UpdateSteamAppReleaseDate(existingApp.SteamAppId, GetAppReleaseDate.GetAppReleaseDates(existingApp.AppId));
                 }
                 else
                 {
-                    Console.WriteLine("Found {0}: {1}", steamApp.AppId, steamApp.Name);
+                    WriteLine(string.Format("Found {0}: {1}", steamApp.AppId, steamApp.Name), 0);
                 }
+
+                counter++;
+
+                WriteLine(counter + " / " + apiApps.Count, 2);
+            }
+        }
+
+        static void WriteLine(string message, int lineIndex)
+        {
+            Console.SetCursorPosition(0, lineIndex);
+
+            string clear = "";
+
+            for (int i = 0; i < Console.WindowWidth; i++)
+            {
+                clear += " ";
             }
 
-            // Connect to the API and get all of the apps.
 
-            // For each app check if it exists in the database already
+            Console.Write(clear);
+            Console.SetCursorPosition(0, lineIndex);
 
-            // If it doesn't, add to list to check back later
-
-            // Loop through list and go and retrieve more information until hit API call limit
-
-            // Once hit API call limit wait for 2 minutes and try again until we are up and running again
-
-            // Display progress to the user
+            Console.Write(message);
         }
     }
 }
