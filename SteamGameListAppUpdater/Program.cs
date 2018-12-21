@@ -13,17 +13,12 @@ namespace SteamGameListAppUpdater
         static void Main(string[] args)
         {
             List<GetAppListApp> apiApps = GetAppList.GetAllApps();
-            List<SteamGameListData.Models.SteamApp> dbApps = SteamGameListData.Models.SteamApp.GetAllSteamApps();
+            List<SteamApp> dbApps = SteamGameListData.Models.SteamApp.GetAllSteamApps();
 
             int counter = 0;
 
             foreach (GetAppListApp steamApp in apiApps)
             {
-                //if(uploadCount> 10)
-                //{
-                //    break;
-                //}
-
                 // Attempt to get from database
                 SteamApp existingApp = dbApps.Where(x => x.AppId == steamApp.AppId).FirstOrDefault();
 
